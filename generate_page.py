@@ -3,7 +3,7 @@ from math import sqrt
 from typing import Union, Tuple
 
 
-def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.576) -> float:
+def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> float:
     if n <= 0:
         return 0.0
     R = S / n
@@ -70,7 +70,7 @@ tr:nth-child(even){background:#fafafa;}
 </style>
 </head>
 <body>
-<h1>Top Board Games (Weighted Wilson 99.5% lower bound)</h1>
+<h1>Top Board Games (Weighted Wilson 99% lower bound)</h1>
 <table class='sortable'>
 <thead>
 <tr>
