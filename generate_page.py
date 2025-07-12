@@ -4,6 +4,7 @@ from typing import Union, Tuple
 
 
 def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> float:
+
     if n <= 0:
         return 0.0
     R = S / n
@@ -17,7 +18,6 @@ def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> f
 
 PRIOR_VOTES = 25  # pseudo-ratings to reduce team-voting effects
 PRIOR_RATING = 6.5  # use a realistic prior around the global average
-
 
 def weighted_score(n: int, S: Union[int, float]) -> float:
     """Wilson lower bound with prior votes at rating PRIOR_RATING."""
