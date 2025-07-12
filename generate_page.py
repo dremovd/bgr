@@ -3,7 +3,7 @@ from math import sqrt
 from typing import Union
 
 
-def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> float:
+def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.576) -> float:
     if n <= 0:
         return 0.0
     R = S / n
@@ -15,11 +15,12 @@ def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> f
     return 1 + 9 * wlb
 
 PRIOR_VOTES = 25  # pseudo-ratings to reduce team-voting effects
+PRIOR_RATING = 6.5  # use a realistic prior around the global average
 
 def weighted_score(n: int, S: Union[int, float]) -> float:
 
-    """Wilson lower bound with PRIOR_VOTES at rating 5.5."""
-    return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * 5.5)
+    """Wilson lower bound with prior votes at rating PRIOR_RATING."""
+    return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * PRIOR_RATING)
 
 
 
@@ -55,7 +56,7 @@ tr:nth-child(even){background:#fafafa;}
 </style>
 </head>
 <body>
-<h1>Top Board Games (Weighted Wilson 99% lower bound)</h1>
+<h1>Top Board Games (Weighted Wilson 99.5% lower bound)</h1>
 <table class='sortable'>
 <thead>
 <tr>
