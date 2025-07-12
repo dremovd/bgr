@@ -14,6 +14,11 @@ python3 generate_page.py 2025-06-18T11-00-01.csv -o docs/index.html
 
 The CSV file contains the raw ratings exported from BoardGameGeek.
 
+Each game name in the table links directly to its BoardGameGeek page. A status
+column shows an emoji based on the official BGG rank: 🔥 for top‑200
+("Bestseller"), 🔎 for rank up to 1000 ("Rare find"), and 💎 for everything
+below ("Hidden gem").
+
 ## GitHub Pages
 
 Publish the contents of the `docs/` directory as a GitHub Pages site.

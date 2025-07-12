@@ -1,6 +1,6 @@
 import csv
 from math import sqrt
-from typing import Union
+from typing import Union, Tuple
 
 
 def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.576) -> float:
@@ -22,6 +22,15 @@ def weighted_score(n: int, S: Union[int, float]) -> float:
     return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * PRIOR_RATING)
 
 
+def status_for_rank(rank: int) -> Tuple[str, str]:
+    """Return emoji and label for a game's BGG rank."""
+    if rank <= 200:
+        return "🔥", "Bestseller"
+    if rank <= 1000:
+        return "🔎", "Rare find"
+    return "💎", "Hidden gem"
+
+
 
 def read_games(path: str):
     games = []
@@ -29,6 +38,7 @@ def read_games(path: str):
         reader = csv.DictReader(f)
         for row in reader:
             try:
+                row_id = int(row['ID'])
                 n = int(row['Users rated'])
                 avg = float(row['Average'])
                 bgg_rank = int(row['Rank'])
@@ -38,6 +48,7 @@ def read_games(path: str):
             row['wilson'] = wilson_lower_bound_10pt(n, S)
             row['weighted'] = weighted_score(n, S)
             row['bgg_rank'] = bgg_rank
+            row['id'] = row_id
             games.append(row)
     return games
 
@@ -68,6 +79,7 @@ tr:nth-child(even){background:#fafafa;}
   <th class='num'>Users Rated</th>
   <th class='num'>Average</th>
   <th class='num'>BGG Rank</th>
+  <th>Status</th>
   <th class='num'>Wilson</th>
   <th class='num'>Weighted</th>
 </tr>
@@ -109,10 +121,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html_head)
         for idx, g in enumerate(games, 1):
+            link = (
+                f"<a href='https://boardgamegeek.com/boardgame/{g['id']}' "
+                "target='_blank' rel='noopener noreferrer'>" + g['Name'] + "</a>"
+            )
+            emoji, label = status_for_rank(g['bgg_rank'])
             f.write(
-                f"<tr><td>{idx}</td><td>{g['Name']}</td><td>{g['Year']}</td>"
+                f"<tr><td>{idx}</td><td>{link}</td><td>{g['Year']}</td>"
                 f"<td>{g['Users rated']}</td><td>{g['Average']}</td>"
-                f"<td>{g['bgg_rank']}</td>"
+                f"<td>{g['bgg_rank']}</td><td><span title='{label}'>{emoji}</span></td>"
                 f"<td>{g['wilson']:.3f}</td><td>{g['weighted']:.3f}</td></tr>\n"
             )
         f.write(html_tail)
