@@ -2,7 +2,7 @@
 
 Board Game Rank
 
-This project ranks board games using a weighted Wilson lower bound with a strict 99.5\% confidence. Each game is adjusted with 25 prior votes at rating 6.5 to reduce small-sample effects. The script reads a CSV export from BoardGameGeek and produces a sortable HTML table.
+This project ranks board games using a weighted Wilson lower bound with a strict 99.5% one-sided confidence (z≈2.576). Each game is adjusted with 25 prior votes at rating 6.5 to reduce small-sample effects. The script reads a CSV export from BoardGameGeek and produces a sortable HTML table.
 
 ## Generate the page
 
