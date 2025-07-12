@@ -14,6 +14,14 @@ def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.326) -> f
     wlb = (centre - adj) / denom
     return 1 + 9 * wlb
 
+PRIOR_VOTES = 25  # pseudo-ratings to reduce team-voting effects
+
+def weighted_score(n: int, S: Union[int, float]) -> float:
+
+    """Wilson lower bound with PRIOR_VOTES at rating 5.5."""
+    return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * 5.5)
+
+
 
 def read_games(path: str):
     games = []
@@ -26,7 +34,7 @@ def read_games(path: str):
             except (ValueError, KeyError):
                 continue
             S = avg * n
-            row['wlb'] = wilson_lower_bound_10pt(n, S)
+            row['wlb'] = weighted_score(n, S)
             games.append(row)
     return games
 
@@ -47,7 +55,7 @@ tr:nth-child(even){background:#fafafa;}
 </style>
 </head>
 <body>
-<h1>Top Board Games (Wilson 99% lower bound)</h1>
+<h1>Top Board Games (Weighted Wilson 99% lower bound)</h1>
 <table class='sortable'>
 <thead>
 <tr>
