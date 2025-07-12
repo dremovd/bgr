@@ -8,14 +8,16 @@ def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.576) -> f
         return 0.0
     R = S / n
     p = (R - 1) / 9.0
-    denom = 1 + z*z / n
-    centre = p + z*z / (2*n)
-    adj = z * sqrt((p*(1 - p) + z*z / (4*n)) / n)
+    denom = 1 + z * z / n
+    centre = p + z * z / (2 * n)
+    adj = z * sqrt((p * (1 - p) + z * z / (4 * n)) / n)
     wlb = (centre - adj) / denom
     return 1 + 9 * wlb
 
+
 PRIOR_VOTES = 25  # pseudo-ratings to reduce team-voting effects
 PRIOR_RATING = 6.5  # use a realistic prior around the global average
+
 
 def weighted_score(n: int, S: Union[int, float]) -> float:
     """Wilson lower bound with prior votes at rating PRIOR_RATING."""
@@ -31,24 +33,23 @@ def status_for_rank(rank: int) -> Tuple[str, str]:
     return "💎", "Hidden gem"
 
 
-
 def read_games(path: str):
     games = []
-    with open(path, newline='', encoding='utf-8') as f:
+    with open(path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             try:
-                row_id = int(row['ID'])
-                n = int(row['Users rated'])
-                avg = float(row['Average'])
-                bgg_rank = int(row['Rank'])
+                row_id = int(row["ID"])
+                n = int(row["Users rated"])
+                avg = float(row["Average"])
+                bgg_rank = int(row["Rank"])
             except (ValueError, KeyError):
                 continue
             S = avg * n
-            row['wilson'] = wilson_lower_bound_10pt(n, S)
-            row['weighted'] = weighted_score(n, S)
-            row['bgg_rank'] = bgg_rank
-            row['id'] = row_id
+            row["wilson"] = wilson_lower_bound_10pt(n, S)
+            row["weighted"] = weighted_score(n, S)
+            row["bgg_rank"] = bgg_rank
+            row["id"] = row_id
             games.append(row)
     return games
 
@@ -118,14 +119,14 @@ document.addEventListener('DOMContentLoaded',()=>{
 </body>
 </html>
 """
-    with open(out_path, 'w', encoding='utf-8') as f:
+    with open(out_path, "w", encoding="utf-8") as f:
         f.write(html_head)
         for idx, g in enumerate(games, 1):
             link = (
                 f"<a href='https://boardgamegeek.com/boardgame/{g['id']}' "
-                "target='_blank' rel='noopener noreferrer'>" + g['Name'] + "</a>"
+                "target='_blank' rel='noopener noreferrer'>" + g["Name"] + "</a>"
             )
-            emoji, label = status_for_rank(g['bgg_rank'])
+            emoji, label = status_for_rank(g["bgg_rank"])
             f.write(
                 f"<tr><td>{idx}</td><td>{link}</td><td>{g['Year']}</td>"
                 f"<td>{g['Users rated']}</td><td>{g['Average']}</td>"
@@ -137,18 +138,25 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('csv_file')
-    parser.add_argument('-o', '--output', default='index.html')
-    parser.add_argument('--min-year', type=int, default=2025,
-                        help='Only include games from this year or later')
+    parser.add_argument("csv_file")
+    parser.add_argument("-o", "--output", default="index.html")
+    parser.add_argument(
+        "--min-year",
+        type=int,
+        default=2025,
+        help="Only include games from this year or later",
+    )
     args = parser.parse_args()
 
-    games = [g for g in read_games(args.csv_file)
-             if int(g.get('Year', 0)) >= args.min_year]
-    games.sort(key=lambda g: g['weighted'], reverse=True)
+    games = [
+        g for g in read_games(args.csv_file) if int(g.get("Year", 0)) >= args.min_year
+    ]
+    games.sort(key=lambda g: g["weighted"], reverse=True)
     top_games = games[:200]
     generate_html(top_games, args.output)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
