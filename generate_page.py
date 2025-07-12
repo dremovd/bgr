@@ -18,7 +18,6 @@ PRIOR_VOTES = 25  # pseudo-ratings to reduce team-voting effects
 PRIOR_RATING = 6.5  # use a realistic prior around the global average
 
 def weighted_score(n: int, S: Union[int, float]) -> float:
-
     """Wilson lower bound with prior votes at rating PRIOR_RATING."""
     return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * PRIOR_RATING)
 
@@ -32,10 +31,13 @@ def read_games(path: str):
             try:
                 n = int(row['Users rated'])
                 avg = float(row['Average'])
+                bgg_rank = int(row['Rank'])
             except (ValueError, KeyError):
                 continue
             S = avg * n
-            row['wlb'] = weighted_score(n, S)
+            row['wilson'] = wilson_lower_bound_10pt(n, S)
+            row['weighted'] = weighted_score(n, S)
+            row['bgg_rank'] = bgg_rank
             games.append(row)
     return games
 
@@ -65,7 +67,9 @@ tr:nth-child(even){background:#fafafa;}
   <th class='num'>Year</th>
   <th class='num'>Users Rated</th>
   <th class='num'>Average</th>
-  <th class='num'>Score</th>
+  <th class='num'>BGG Rank</th>
+  <th class='num'>Wilson</th>
+  <th class='num'>Weighted</th>
 </tr>
 </thead>
 <tbody>
@@ -105,9 +109,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html_head)
         for idx, g in enumerate(games, 1):
-            f.write(f"<tr><td>{idx}</td><td>{g['Name']}</td><td>{g['Year']}</td>"
-                    f"<td>{g['Users rated']}</td><td>{g['Average']}</td>"
-                    f"<td>{g['wlb']:.3f}</td></tr>\n")
+            f.write(
+                f"<tr><td>{idx}</td><td>{g['Name']}</td><td>{g['Year']}</td>"
+                f"<td>{g['Users rated']}</td><td>{g['Average']}</td>"
+                f"<td>{g['bgg_rank']}</td>"
+                f"<td>{g['wilson']:.3f}</td><td>{g['weighted']:.3f}</td></tr>\n"
+            )
         f.write(html_tail)
 
 
@@ -119,7 +126,7 @@ def main():
     args = parser.parse_args()
 
     games = read_games(args.csv_file)
-    games.sort(key=lambda g: g['wlb'], reverse=True)
+    games.sort(key=lambda g: g['weighted'], reverse=True)
     top_games = games[:200]
     generate_html(top_games, args.output)
 
