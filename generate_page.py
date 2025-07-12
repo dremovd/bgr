@@ -80,14 +80,28 @@ def generate_html(games_recent, games_all, out_path: str, recent_year: int):
 <html lang='en'>
 <head>
 <meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <title>Top Board Games</title>
 <style>
-body{{font-family:Arial,Helvetica,sans-serif;margin:2em;}}
-table{{border-collapse:collapse;width:100%;}}
-th,td{{border:1px solid #ccc;padding:0.4em;text-align:left;}}
-th{{cursor:pointer;background:#f2f2f2;}}
+:root{{
+  --bg:#fff;
+  --text:#333;
+  --accent:#007acc;
+}}
+body{{
+  font-family:system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  margin:2rem;
+  line-height:1.5;
+  background:var(--bg);
+  color:var(--text);
+}}
+table{{border-collapse:collapse;width:100%;margin-top:1rem;}}
+th,td{{border:1px solid #ccc;padding:0.5rem;text-align:left;}}
+th{{cursor:pointer;background:#f3f3f3;}}
 tr:nth-child(even){{background:#fafafa;}}
-td.thumb img{{width:40px;height:auto;display:block;}}
+td.thumb img{{width:48px;height:auto;display:block;}}
+button{{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:0.5em 1em;margin-bottom:1rem;cursor:pointer;font-size:1rem;}}
+button:hover{{opacity:0.9;}}
 </style>
 </head>
 <body>
