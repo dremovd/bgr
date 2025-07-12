@@ -2,8 +2,10 @@ import csv
 from math import sqrt
 from typing import Union, Tuple
 
+DEFAULT_Z = 2.576  # z-score for 99.5% one-sided Wilson interval
 
-def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = 2.576) -> float:
+
+def wilson_lower_bound_10pt(n: int, S: Union[int, float], z: float = DEFAULT_Z) -> float:
     if n <= 0:
         return 0.0
     R = S / n
