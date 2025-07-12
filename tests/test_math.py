@@ -1,7 +1,6 @@
 import csv
 import math
 from pathlib import Path
-from scipy.stats import norm
 import pytest
 
 import generate_page as gp
@@ -9,7 +8,7 @@ import generate_page as gp
 
 def test_wilson_manual_example():
     n, S = 100, 800
-    z = norm.ppf(0.995)  # 99.5% one-sided
+    z = gp.DEFAULT_Z
     R = S / n
     p = (R - 1) / 9.0
     denom = 1 + z * z / n
@@ -24,12 +23,12 @@ def test_wilson_zero_votes():
 
 
 def test_weighted_score_matches_manual():
-    csv_path = Path('2025-06-18T11-00-01.csv')
-    with csv_path.open(newline='', encoding='utf-8') as f:
+    csv_path = Path("2025-06-18T11-00-01.csv")
+    with csv_path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         row = next(reader)  # first game in file
-    n = int(row['Users rated'])
-    avg = float(row['Average'])
+    n = int(row["Users rated"])
+    avg = float(row["Average"])
     S = n * avg
     z = gp.DEFAULT_Z
     expected = gp.wilson_lower_bound_10pt(
