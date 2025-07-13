@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?><items termsofuse="https://boardgamegeek.com/xmlapi/termsofuse"><item type="boardgame" id="219650">
+         <thumbnail>https://cf.geekdo-images.com/GGXq2lRAJCtS1yPPPmdVKw__thumb/img/-ERrbcuFZtzZSLfl8grcDi_pCgY=/fit-in/200x150/filters:strip_icc()/pic6205610.png</thumbnail>
+      <image>https://cf.geekdo-images.com/GGXq2lRAJCtS1yPPPmdVKw__original/img/EN7iqByTarLfTC4XmZ_A0CQB_1E=/0x0/filters:format(png)/pic6205610.png</image>
+                                     				
+				<name type="primary" sortindex="1" value="Arydia: The Paths We Dare Tread" />
+			
+						                           
+						               													<description>Arydia: The Paths We Dare Tread is an open world, campaign-based, co-operative, fantasy-based, &amp;quot;green legacy&amp;quot; role-playing board game. The game of Arydia is built on four design pillars: Exploration, Progression, Combat, and Role-playing.&amp;#10;&amp;#10;&amp;#10;     Exploration &amp;mdash; Arydia is an open world to explore as you wish. Make your way across the world map, discovering new locations, interacting with memorable characters, fighting vicious monsters, and scavenging long-lost treasures. The world pulls you in through detailed descriptions and vivid artwork for each place you visit. Every location is unique, not randomized, and is built piece by piece as you explore.&amp;#10;&amp;#10;&amp;#10;&amp;#10;     Progression &amp;mdash; Arydia is played as a campaign over the course of a number of game sessions; you start each session right where you left off! As you play, the game keeps track of your actions and decisions. Your characters will grow in power, collecting new items, weapons, and skills. NPCs and locations will change, depending on how you interact with them. All of this progression is done using a simple, but powerful, index system, which allows for quick and easy set-up and tear down.&amp;#10;&amp;#10;&amp;#10;&amp;#10;     Combat &amp;mdash; Many of the locations you'll visit in Arydia are hostile, so you'll need your weapons, skills, and co-operation to overcome the challenges you encounter! Arydia features a tactical, co-operative combat system. Enemies are controlled by game cards and dice, while you and your companions work together to defeat them.&amp;#10;&amp;#10;&amp;#10;&amp;#10;     Role-playing &amp;mdash; Take on the roles of a wide cast of characters as you encounter them throughout your journeys. Step into the shoes of a disgruntled shop owner, sniffling brat, or a poorly-dressed bandit leader. The incentive-based role-play system encourages you to engage in dramatic storytelling, without being intrusive.&amp;#10;&amp;#10;&amp;#10;As for being a &amp;quot;green legacy&amp;quot; game, publisher Far Off Games notes that Arydia features all the hallmarks of a legacy game &amp;mdash; packages to open, hidden information, progression, discovery, exploration, all the while wrapping it in high-quality components &amp;mdash; but allows you to reset the game when you have completed it so that you can start again or pass it on to someone else.&amp;#10;&amp;#10;</description>
+										      	               				<yearpublished value="2025" />
+						               				<minplayers value="1" />
+						               				<maxplayers value="4" />
+						      			<poll name="suggested_numplayers" title="User Suggested Number of Players" totalvotes="94">
+			
+		<results numplayers="1">		
+					<result value="Best" numvotes="20" />
+					<result value="Recommended" numvotes="45" />
+					<result value="Not Recommended" numvotes="13" />
+				</results>					
+			
+		<results numplayers="2">		
+					<result value="Best" numvotes="51" />
+					<result value="Recommended" numvotes="33" />
+					<result value="Not Recommended" numvotes="1" />
+				</results>					
+			
+		<results numplayers="3">		
+					<result value="Best" numvotes="30" />
+					<result value="Recommended" numvotes="35" />
+					<result value="Not Recommended" numvotes="9" />
+				</results>					
+			
+		<results numplayers="4">		
+					<result value="Best" numvotes="10" />
+					<result value="Recommended" numvotes="34" />
+					<result value="Not Recommended" numvotes="23" />
+				</results>					
+			
+		<results numplayers="4+">		
+					<result value="Best" numvotes="1" />
+					<result value="Recommended" numvotes="2" />
+					<result value="Not Recommended" numvotes="48" />
+				</results>					
+	</poll>
+<poll-summary name="suggested_numplayers"  title="User Suggested Number of Players">
+  <result name="bestwith" value="Best with 2 players" />
+  <result name="recommmendedwith" value="Recommended with 1–4 players" />
+</poll-summary> 			               				<playingtime value="240" />
+						               				<minplaytime value="60" />
+						               				<maxplaytime value="240" />
+						               				<minage value="14" />
+						      			<poll name="suggested_playerage" title="User Suggested Player Age" totalvotes="19">
+			<results>		
+					<result value="2" numvotes="0" />
+					<result value="3" numvotes="0" />
+					<result value="4" numvotes="0" />
+					<result value="5" numvotes="1" />
+					<result value="6" numvotes="0" />
+					<result value="8" numvotes="1" />
+					<result value="10" numvotes="8" />
+					<result value="12" numvotes="6" />
+					<result value="14" numvotes="3" />
+					<result value="16" numvotes="0" />
+					<result value="18" numvotes="0" />
+					<result value="21 and up" numvotes="0" />
+				</results>					
+	</poll> 			      			<poll name="language_dependence" title="Language Dependence" totalvotes="3">
+			
+		<results>		
+					<result level="1" value="No necessary in-game text" numvotes="0" />
+					<result level="2" value="Some necessary text - easily memorized or small crib sheet" numvotes="0" />
+					<result level="3" value="Moderate in-game text - needs crib sheet or paste ups" numvotes="0" />
+					<result level="4" value="Extensive use of text - massive conversion needed to be playable" numvotes="2" />
+					<result level="5" value="Unplayable in another language" numvotes="1" />
+				</results>					
+	</poll> 			      			 			      				
+		 			
+
+			
+		
+					<link type="boardgamecategory" id="1022" value="Adventure" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamecategory" id="1017" value="Dice" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamecategory" id="1020" value="Exploration" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamecategory" id="1010" value="Fantasy" />
+		
+									
+			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2023" value="Cooperative Game" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2854" value="Critical Hits and Failures" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2072" value="Dice Rolling" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2676" value="Grid Movement" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2975" value="Line of Sight" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2011" value="Modular Board" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2851" value="Narrative Choice / Paragraph" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2028" value="Role Playing" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2822" value="Scenario / Mission / Campaign Game" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2819" value="Solo / Solitaire Game" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2027" value="Storytelling" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamemechanic" id="2849" value="Tech Trees / Tech Tracks" />
+		
+									
+			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgamefamily" id="22783" value="Admin: Better Description Needed!" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamefamily" id="66140" value="Components: Polyhedral (not D6) dice" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamefamily" id="8374" value="Crowdfunding: Kickstarter" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamefamily" id="24281" value="Mechanism: Campaign Games" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamefamily" id="5666" value="Players: Games with Solitaire Rules" />
+		
+									
+			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgameexpansion" id="344086" value="Arydia: The Paths We Dare Tread – Epic Hunt" />
+		
+									
+			
+
+			      			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgameaccessory" id="406094" value="Arydia: The Paths We Dare Tread – Small Bodies Miniature Pack" />
+		
+									
+			
+
+			      			
+
+			      			
+
+			      			
+
+			      			
+
+			      			
+
+			      	      	      				
+		 			
+
+			
+		
+					<link type="boardgamedesigner" id="42141" value="Cody Miller" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgamedesigner" id="46210" value="Ira Fay" />
+		
+									
+			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="111811" value="Philipp Ach" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="139264" value="Tess Anderson" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="70571" value="Lina Cossette" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="70568" value="David Forest" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="139267" value="Kirk Hamilton" />
+		
+									
+			
+
+			      	      				
+		 			
+
+			
+		
+					<link type="boardgamepublisher" id="14439" value="Far Off Games" />
+		
+									
+			
+
+			
+	
+
+	<versions><item type="boardgameversion" id="342199">
+         <thumbnail>https://cf.geekdo-images.com/GGXq2lRAJCtS1yPPPmdVKw__thumb/img/-ERrbcuFZtzZSLfl8grcDi_pCgY=/fit-in/200x150/filters:strip_icc()/pic6205610.png</thumbnail>
+      <image>https://cf.geekdo-images.com/GGXq2lRAJCtS1yPPPmdVKw__original/img/EN7iqByTarLfTC4XmZ_A0CQB_1E=/0x0/filters:format(png)/pic6205610.png</image>
+            				
+		 			
+
+			
+		
+					<link type="boardgameversion" id="219650" value="Arydia: The Paths We Dare Tread" inbound="true"/>
+		
+									
+			
+
+			                               				
+				<name type="primary" sortindex="1" value="English edition" />
+			
+						                           
+						      				
+		 			
+
+			
+		
+					<link type="boardgamepublisher" id="14439" value="Far Off Games" />
+		
+									
+			
+
+			      				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="111811" value="Philipp Ach" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="70571" value="Lina Cossette" />
+		
+									
+				
+		 			
+
+			
+		
+					<link type="boardgameartist" id="70568" value="David Forest" />
+		
+									
+			
+
+			               				<yearpublished value="2025" />
+						               				<productcode value="FOG900" />
+						               				<width value="11.4173" />
+						               				<length value="15.9449" />
+						               				<depth value="9.05512" />
+						               				<weight value="23.8099" />
+						      				
+		 			
+
+			
+		
+					<link type="language" id="2184" value="English" />
+		
+									
+			
+
+			
+	
+
+	
+
+	
+	
+	
+   
+	
+          
+</item>
+</versions>
+
+	
+	
+	
+   		<statistics page="1">
+								<ratings >
+			<usersrated value="1892" />
+			<average value="9.17765" />
+			<bayesaverage value="6.94645" />
+
+			<ranks>
+															<rank type="subtype" id="1" name="boardgame" friendlyname="Board Game Rank" value="552" bayesaverage="6.94645" />
+																				<rank type="family" id="5496" name="thematic" friendlyname="Thematic Rank" value="31" bayesaverage="7.5695" />
+												</ranks>
+
+			<stddev value="1.34644" />
+			<median value="0" />
+			<owned value="4508" />
+			<trading value="25" />
+			<wanting value="466" />
+			<wishing value="4411" />
+			<numcomments value="652" />
+			<numweights value="93" />
+			<averageweight value="3.2796" />
+			</ratings>
+								</statistics>
+     
+	
+          
+</item>
+</items>

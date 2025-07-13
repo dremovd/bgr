@@ -5,7 +5,9 @@ from typing import Union, Tuple
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import requests
+import os
 from functools import lru_cache
+import time
 
 DEFAULT_Z = 2.576  # z-score for 99.5% one-sided Wilson interval
 
@@ -61,12 +63,21 @@ def status_for_rank(rank: int) -> Tuple[str, str]:
 @lru_cache(maxsize=None)
 def fetch_details(game_id: int):
     """Return extra info from BGG: weight and flag booleans."""
+    if os.environ.get("BGR_OFFLINE"):
+        xml = Path("sample.xml").read_text()
+        return parse_details(xml, game_id)
     url = (
         f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
     )
+    time.sleep(1)
     r = requests.get(url, timeout=30)
     r.raise_for_status()
-    tree = ET.fromstring(r.text)
+    return parse_details(r.text, game_id)
+
+
+def parse_details(xml_text: str, game_id: int):
+    """Parse BGG XML and return details dict."""
+    tree = ET.fromstring(xml_text)
     item = tree.find("item")
     weight_node = item.find("./statistics/ratings/averageweight")
     weight = float(weight_node.attrib.get("value", "0")) if weight_node is not None else 0.0
@@ -76,16 +87,33 @@ def fetch_details(game_id: int):
         is not None
     )
     versions_node = item.find(".//versions")
-    version_items = versions_node.findall("item") if versions_node is not None else []
+    version_items = (
+        [v for v in versions_node.findall("item") if v.attrib.get("type") == "boardgameversion"]
+        if versions_node is not None
+        else []
+    )
     inbound_versions = item.findall(
         ".//link[@type='boardgameversion'][@inbound='true']"
     )
-    has_versions = len(version_items) > 1 or len(inbound_versions) > 1
+    version_ids = {
+        v.attrib.get("id")
+        for v in version_items
+        if v.attrib.get("id") != str(game_id)
+    }
+    link_ids = {
+        l.attrib.get("id")
+        for l in inbound_versions
+        if l.attrib.get("id") != str(game_id)
+    }
+    unique_versions = version_ids | link_ids
+    has_versions = len(unique_versions) > 1
+    n_versions = len(unique_versions)
     return {
         "weight": weight,
         "is_expansion": is_expansion,
         "reimplements": reimplements,
         "has_versions": has_versions,
+        "n_versions": n_versions,
     }
 
 
@@ -317,9 +345,20 @@ def main():
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
     top_ids = {g["id"] for g in games_recent[:200]} | {g["id"] for g in games_all[:200]}
+    detail_rows = []
     for g in all_games:
         if g["id"] in top_ids:
-            g.update(fetch_details(g["id"]))
+            details = fetch_details(g["id"])
+            g.update(details)
+            row = {"id": g["id"], "name": g["Name"]}
+            row.update(details)
+            detail_rows.append(row)
+    if detail_rows:
+        out_details = f"details-{Path(csv_path).stem}.csv"
+        with open(out_details, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=detail_rows[0].keys())
+            writer.writeheader()
+            writer.writerows(detail_rows)
     generate_html(games_recent[:200], games_all[:200], args.output, args.min_year, snapshot)
 
 

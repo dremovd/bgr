@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<items>
+  <item id="1" type="boardgame">
+    <versions>
+      <item type="boardgameversion" id="10" />
+      <item type="boardgameversion" id="11" />
+    </versions>
+  </item>
+</items>
