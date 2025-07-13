@@ -148,7 +148,13 @@ def _table_rows(games):
         r_emoji, r_label = status_for_rank(g["bgg_rank"])
         c_emoji, c_label = complexity_status(g.get("weight", 0.0))
         thumb = g.get("thumb", "")
-        img = f"<img src='{thumb}' alt='{g['Name']} thumbnail'>" if thumb else ""
+        if thumb:
+            img = (
+                f"<img src='{thumb}' alt='{g['Name']} thumbnail' "
+                "width='48' height='48'>"
+            )
+        else:
+            img = ""
         parts = [(r_emoji, r_label)]
         if g.get("is_expansion"):
             parts.append(("🧩", "Expansion"))
@@ -228,6 +234,7 @@ button:hover{{opacity:0.9;}}
     html_tail = f"""
 </tbody>
 </table>
+<template id='all-template'>
 <table id='all' class='sortable' style='display:none'>
 <thead>
 <tr>
@@ -249,6 +256,7 @@ button:hover{{opacity:0.9;}}
     script = f"""
 </tbody>
 </table>
+</template>
 <script>
 function makeSortable(table){{
   const ths = table.tHead.rows[0].cells;
@@ -267,15 +275,23 @@ function makeSortable(table){{
         return (dirs[i]?1:-1)*A.localeCompare(B);
       }});
       dirs[i] = !dirs[i];
-      rows.forEach(r=>tbody.appendChild(r));
+      const frag = document.createDocumentFragment();
+      rows.forEach(r=>frag.appendChild(r));
+      tbody.appendChild(frag);
     }});
   }}
 }}
 function setupToggle(){{
   const btn = document.getElementById('toggle');
   const recent = document.getElementById('recent');
-  const all = document.getElementById('all');
+  let all = document.getElementById('all');
   btn.addEventListener('click',()=>{{
+    if(!all){{
+      const tmpl = document.getElementById('all-template');
+      all = tmpl.content.firstElementChild.cloneNode(true);
+      tmpl.replaceWith(all);
+      makeSortable(all);
+    }}
     if(all.style.display==='none'){{
       recent.style.display='none';
       all.style.display='';
