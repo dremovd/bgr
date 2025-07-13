@@ -66,7 +66,12 @@ def fetch_details(game_id: int):
     )
     r = requests.get(url, timeout=30)
     r.raise_for_status()
-    tree = ET.fromstring(r.text)
+    return parse_details(r.text, game_id)
+
+
+def parse_details(xml_text: str, game_id: int):
+    """Parse BGG XML and return details dict."""
+    tree = ET.fromstring(xml_text)
     item = tree.find("item")
     weight_node = item.find("./statistics/ratings/averageweight")
     weight = float(weight_node.attrib.get("value", "0")) if weight_node is not None else 0.0
@@ -80,7 +85,17 @@ def fetch_details(game_id: int):
     inbound_versions = item.findall(
         ".//link[@type='boardgameversion'][@inbound='true']"
     )
-    has_versions = len(version_items) > 1 or len(inbound_versions) > 1
+    version_ids = {
+        v.attrib.get("id")
+        for v in version_items
+        if v.attrib.get("id") != str(game_id)
+    }
+    link_ids = {
+        l.attrib.get("id")
+        for l in inbound_versions
+        if l.attrib.get("id") != str(game_id)
+    }
+    has_versions = len(version_ids | link_ids) > 1
     return {
         "weight": weight,
         "is_expansion": is_expansion,
