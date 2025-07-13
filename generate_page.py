@@ -154,7 +154,7 @@ def _table_rows(games):
             parts.append(("🧩", "Expansion"))
         if g.get("reimplements"):
             parts.append(("♻️", "Reimplements"))
-        if g.get("version_count", 0) > 0:
+        if g.get("version_count", 0) > 1:
             parts.append(("🌐", "Has versions"))
         parts.append((c_emoji, c_label))
         status_icons = "".join(

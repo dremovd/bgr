@@ -30,3 +30,32 @@ def test_complexity_status_boundaries():
     assert gp.complexity_status(2.5)[1] == "Medium"
     assert gp.complexity_status(3.5)[1] == "Complicated"
     assert gp.complexity_status(4.5)[1] == "Hardcore"
+
+
+def test_version_icon_threshold():
+    games = [
+        {
+            "id": 1,
+            "Name": "A",
+            "Year": "2025",
+            "Users rated": "10",
+            "Average": "8",
+            "bgg_rank": 1,
+            "wilson": 0.0,
+            "weighted": 0.0,
+            "version_count": 1,
+        },
+        {
+            "id": 2,
+            "Name": "B",
+            "Year": "2025",
+            "Users rated": "10",
+            "Average": "8",
+            "bgg_rank": 1,
+            "wilson": 0.0,
+            "weighted": 0.0,
+            "version_count": 2,
+        },
+    ]
+    html = gp._table_rows(games)
+    assert html.count("🌐") == 1
