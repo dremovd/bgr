@@ -25,6 +25,8 @@ reimplements another game, 🌐 if different language versions exist, and a colo
 dot for the complexity level (🟢 light, 🟡 medium, 🟠 complicated, 🔴 hardcore).
 Each row also displays a small thumbnail image and a numeric complexity rating
 fetched from the BGG API.
+The page header also shows the snapshot time parsed from the CSV filename so visitors can see when the rankings were last updated.
+
 
 ## GitHub Pages
 
