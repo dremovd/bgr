@@ -2,6 +2,9 @@ import csv
 from math import sqrt
 from typing import Union, Tuple
 from pathlib import Path
+import xml.etree.ElementTree as ET
+import requests
+from functools import lru_cache
 
 DEFAULT_Z = 2.576  # z-score for 99.5% one-sided Wilson interval
 
@@ -44,6 +47,42 @@ def status_for_rank(rank: int) -> Tuple[str, str]:
     return "💎", "Hidden gem"
 
 
+@lru_cache(maxsize=None)
+def fetch_details(game_id: int):
+    """Return extra info from BGG: weight and flag booleans."""
+    url = (
+        f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
+    )
+    r = requests.get(url, timeout=30)
+    r.raise_for_status()
+    tree = ET.fromstring(r.text)
+    item = tree.find("item")
+    weight_node = item.find("./statistics/ratings/averageweight")
+    weight = float(weight_node.attrib.get("value", "0")) if weight_node is not None else 0.0
+    is_expansion = item.attrib.get("type") == "boardgameexpansion"
+    reimplements = item.find(".//link[@type='boardgameimplementation'][@inbound='true']") is not None
+    has_versions = item.find(".//versions") is not None or item.find(
+        ".//link[@type='boardgameversion'][@inbound='true']"
+    ) is not None
+    return {
+        "weight": weight,
+        "is_expansion": is_expansion,
+        "reimplements": reimplements,
+        "has_versions": has_versions,
+    }
+
+
+def complexity_status(weight: float) -> Tuple[str, str]:
+    """Return emoji and label for a game's complexity weight."""
+    if weight < 2:
+        return "🟢", "Light"
+    if weight < 3:
+        return "🟡", "Medium"
+    if weight < 4:
+        return "🟠", "Complicated"
+    return "🔴", "Hardcore"
+
+
 def read_games(path: str):
     games = []
     with open(path, newline="", encoding="utf-8") as f:
@@ -67,6 +106,12 @@ def read_games(path: str):
     return games
 
 
+def enrich_games(games):
+    for g in games:
+        details = fetch_details(g["id"])
+        g.update(details)
+
+
 def _table_rows(games):
     rows = []
     for idx, g in enumerate(games, 1):
@@ -74,13 +119,35 @@ def _table_rows(games):
             f"<a href='https://boardgamegeek.com/boardgame/{g['id']}' "
             "target='_blank' rel='noopener noreferrer'>" + g["Name"] + "</a>"
         )
-        emoji, label = status_for_rank(g["bgg_rank"])
+        r_emoji, r_label = status_for_rank(g["bgg_rank"])
+        c_emoji, c_label = complexity_status(g.get("weight", 0.0))
+        flags = []
+        if g.get("is_expansion"):
+            flags.append("🧩")
+        if g.get("reimplements"):
+            flags.append("♻️")
+        if g.get("has_versions"):
+            flags.append("🌐")
         thumb = g.get("thumb", "")
         img = f"<img src='{thumb}' alt='{g['Name']} thumbnail'>" if thumb else ""
+        title = ", ".join(
+            filter(
+                None,
+                [
+                    r_label,
+                    "Expansion" if g.get("is_expansion") else "",
+                    "Reimplements" if g.get("reimplements") else "",
+                    "Has versions" if g.get("has_versions") else "",
+                    c_label,
+                ],
+            )
+        )
+        status_icons = r_emoji + "".join(flags) + c_emoji
         rows.append(
             f"<tr><td>{idx}</td><td class='thumb'>{img}</td><td>{link}</td>"
             f"<td>{g['Year']}</td><td>{g['Users rated']}</td><td>{g['Average']}</td>"
-            f"<td>{g['bgg_rank']}</td><td><span title='{label}'>{emoji}</span></td>"
+            f"<td>{g['bgg_rank']}</td><td><span title='{title}'>{status_icons}</span></td>"
+            f"<td>{g.get('weight', 0):.2f}</td>"
             f"<td>{g['wilson']:.3f}</td><td>{g['weighted']:.3f}</td></tr>"
         )
     return "\n".join(rows)
@@ -129,6 +196,7 @@ button:hover{{opacity:0.9;}}
   <th class='num'>Average</th>
   <th class='num'>BGG Rank</th>
   <th>Status</th>
+  <th class='num'>Complexity</th>
   <th class='num'>Wilson</th>
   <th class='num'>Weighted</th>
 </tr>
@@ -149,6 +217,7 @@ button:hover{{opacity:0.9;}}
   <th class='num'>Average</th>
   <th class='num'>BGG Rank</th>
   <th>Status</th>
+  <th class='num'>Complexity</th>
   <th class='num'>Wilson</th>
   <th class='num'>Weighted</th>
 </tr>
@@ -233,6 +302,10 @@ def main():
     games_all = list(all_games)
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
+    top_ids = {g["id"] for g in games_recent[:200]} | {g["id"] for g in games_all[:200]}
+    for g in all_games:
+        if g["id"] in top_ids:
+            g.update(fetch_details(g["id"]))
     generate_html(games_recent[:200], games_all[:200], args.output, args.min_year)
 
 

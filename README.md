@@ -18,8 +18,13 @@ Use `--min-year` to pick the cutoff year for the "recent" list. The generated pa
 python3 generate_page.py -o docs/index.html --min-year 2025
 ```
 
-The CSV file contains the raw ratings exported from BoardGameGeek. Each game name links directly to its BoardGameGeek page. A status column shows an emoji based on the official BGG rank: 🔥 for top‑200 ("Bestseller"), 🔎 for rank up to 1000 ("Rare find"), and 💎 for everything below ("Hidden gem").
-Each row also displays a small thumbnail image using the `Thumbnail` field from the CSV export.
+The CSV file contains the raw ratings exported from BoardGameGeek. Each game name
+links directly to its BoardGameGeek page. A status column now combines several
+emojis: 🔥/🔎/💎 for the official rank, 🧩 if the entry is an expansion, ♻️ if it
+reimplements another game, 🌐 if different language versions exist, and a colour
+dot for the complexity level (🟢 light, 🟡 medium, 🟠 complicated, 🔴 hardcore).
+Each row also displays a small thumbnail image and a numeric complexity rating
+fetched from the BGG API.
 
 ## GitHub Pages
 
