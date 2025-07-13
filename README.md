@@ -9,13 +9,13 @@ This project ranks board games using a weighted Wilson lower bound with a strict
 Run the helper script to produce `docs/index.html`:
 
 ```bash
-python3 generate_page.py 2025-06-18T11-00-01.csv -o docs/index.html
+python3 generate_page.py -o docs/index.html
 ```
 
 Use `--min-year` to pick the cutoff year for the "recent" list. The generated page contains two tables and a toggle button to switch between them: one shows only games from the chosen year onward, the other shows all years. For example:
 
 ```bash
-python3 generate_page.py 2025-06-18T11-00-01.csv -o docs/index.html --min-year 2025
+python3 generate_page.py -o docs/index.html --min-year 2025
 ```
 
 The CSV file contains the raw ratings exported from BoardGameGeek. Each game name links directly to its BoardGameGeek page. A status column shows an emoji based on the official BGG rank: 🔥 for top‑200 ("Bestseller"), 🔎 for rank up to 1000 ("Rare find"), and 💎 for everything below ("Hidden gem").

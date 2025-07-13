@@ -1,6 +1,7 @@
 import csv
 from math import sqrt
 from typing import Union, Tuple
+from pathlib import Path
 
 DEFAULT_Z = 2.576  # z-score for 99.5% one-sided Wilson interval
 
@@ -24,6 +25,14 @@ PRIOR_RATING = 6.5  # use a realistic prior around the global average
 def weighted_score(n: int, S: Union[int, float]) -> float:
     """Wilson lower bound with prior votes at rating PRIOR_RATING."""
     return wilson_lower_bound_10pt(n + PRIOR_VOTES, S + PRIOR_VOTES * PRIOR_RATING)
+
+
+def latest_csv() -> str:
+    """Return the path to the newest ratings CSV in the current directory."""
+    files = sorted(Path(".").glob("20*.csv"))
+    if not files:
+        raise FileNotFoundError("No ratings CSV found")
+    return str(files[-1])
 
 
 def status_for_rank(rank: int) -> Tuple[str, str]:
@@ -207,7 +216,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("csv_file")
+    parser.add_argument("csv_file", nargs="?", default=None)
     parser.add_argument("-o", "--output", default="index.html")
     parser.add_argument(
         "--min-year",
@@ -217,7 +226,9 @@ def main():
     )
     args = parser.parse_args()
 
-    all_games = read_games(args.csv_file)
+    csv_path = args.csv_file or latest_csv()
+
+    all_games = read_games(csv_path)
     games_recent = [g for g in all_games if int(g.get("Year", 0)) >= args.min_year]
     games_all = list(all_games)
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)

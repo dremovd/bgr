@@ -3,6 +3,8 @@ import math
 from pathlib import Path
 import pytest
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import generate_page as gp
 
 
@@ -23,7 +25,9 @@ def test_wilson_zero_votes():
 
 
 def test_weighted_score_matches_manual():
-    csv_path = Path("2025-06-18T11-00-01.csv")
+    csv_files = sorted(Path(".").glob("20*.csv"))
+    assert csv_files, "no ratings csv files found"
+    csv_path = csv_files[-1]
     with csv_path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         row = next(reader)  # first game in file
