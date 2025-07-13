@@ -87,7 +87,11 @@ def parse_details(xml_text: str, game_id: int):
         is not None
     )
     versions_node = item.find(".//versions")
-    version_items = versions_node.findall("item") if versions_node is not None else []
+    version_items = (
+        [v for v in versions_node.findall("item") if v.attrib.get("type") == "boardgameversion"]
+        if versions_node is not None
+        else []
+    )
     inbound_versions = item.findall(
         ".//link[@type='boardgameversion'][@inbound='true']"
     )
