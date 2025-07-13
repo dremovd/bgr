@@ -71,10 +71,16 @@ def fetch_details(game_id: int):
     weight_node = item.find("./statistics/ratings/averageweight")
     weight = float(weight_node.attrib.get("value", "0")) if weight_node is not None else 0.0
     is_expansion = item.attrib.get("type") == "boardgameexpansion"
-    reimplements = item.find(".//link[@type='boardgameimplementation'][@inbound='true']") is not None
-    has_versions = item.find(".//versions") is not None or item.find(
+    reimplements = (
+        item.find(".//link[@type='boardgameimplementation'][@inbound='true']")
+        is not None
+    )
+    versions_node = item.find(".//versions")
+    version_items = versions_node.findall("item") if versions_node is not None else []
+    inbound_versions = item.findall(
         ".//link[@type='boardgameversion'][@inbound='true']"
-    ) is not None
+    )
+    has_versions = len(version_items) > 1 or len(inbound_versions) > 1
     return {
         "weight": weight,
         "is_expansion": is_expansion,
