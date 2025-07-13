@@ -6,6 +6,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import requests
 from functools import lru_cache
+import time
 
 DEFAULT_Z = 2.576  # z-score for 99.5% one-sided Wilson interval
 
@@ -64,6 +65,7 @@ def fetch_details(game_id: int):
     url = (
         f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
     )
+    time.sleep(1)
     r = requests.get(url, timeout=30)
     r.raise_for_status()
     return parse_details(r.text, game_id)
