@@ -80,12 +80,17 @@ def fetch_details(game_id: int):
     inbound_versions = item.findall(
         ".//link[@type='boardgameversion'][@inbound='true']"
     )
-    has_versions = len(version_items) > 1 or len(inbound_versions) > 1
+    version_ids = {v.attrib.get("id") for v in version_items}
+    version_ids.update(v.attrib.get("id") for v in inbound_versions)
+    version_ids.discard(None)
+    version_count = len(version_ids)
+    has_versions = version_count > 1
     return {
         "weight": weight,
         "is_expansion": is_expansion,
         "reimplements": reimplements,
         "has_versions": has_versions,
+        "version_count": version_count,
     }
 
 
@@ -306,6 +311,17 @@ def main():
         default=2025,
         help="Year threshold for the recent list",
     )
+    parser.add_argument(
+        "--details-csv",
+        help="Write intermediate game details to this CSV file",
+        default=None,
+    )
+    parser.add_argument(
+        "--top",
+        type=int,
+        default=200,
+        help="Number of top games to fetch details for",
+    )
     args = parser.parse_args()
 
     csv_path = args.csv_file or latest_csv()
@@ -316,10 +332,41 @@ def main():
     games_all = list(all_games)
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
-    top_ids = {g["id"] for g in games_recent[:200]} | {g["id"] for g in games_all[:200]}
+    top = max(0, args.top)
+    top_ids = {g["id"] for g in games_recent[:top]} | {g["id"] for g in games_all[:top]}
+    details_rows = []
     for g in all_games:
         if g["id"] in top_ids:
-            g.update(fetch_details(g["id"]))
+            details = fetch_details(g["id"])
+            g.update(details)
+            if args.details_csv:
+                details_rows.append(
+                    {
+                        "id": g["id"],
+                        "name": g["Name"],
+                        "weight": details.get("weight", 0.0),
+                        "version_count": details.get("version_count", 0),
+                        "is_expansion": details.get("is_expansion", False),
+                        "reimplements": details.get("reimplements", False),
+                        "has_versions": details.get("has_versions", False),
+                    }
+                )
+    if args.details_csv and details_rows:
+        with open(args.details_csv, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=[
+                    "id",
+                    "name",
+                    "weight",
+                    "version_count",
+                    "is_expansion",
+                    "reimplements",
+                    "has_versions",
+                ],
+            )
+            writer.writeheader()
+            writer.writerows(details_rows)
     generate_html(games_recent[:200], games_all[:200], args.output, args.min_year, snapshot)
 
 
