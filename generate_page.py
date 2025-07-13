@@ -83,7 +83,7 @@ def generate_html(games_recent, games_all, out_path: str, recent_year: int):
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>Top Board Games</title>
+<title>Best Board Game</title>
 <style>
 :root{{
   --bg:#fff;
@@ -107,7 +107,7 @@ button:hover{{opacity:0.9;}}
 </style>
 </head>
 <body>
-<h1>Top Board Games (Weighted Wilson 99.5% lower bound)</h1>
+<h1>Best Board Game Rankings (Weighted Wilson 99.5% lower bound)</h1>
 <button id='toggle'>Show all years</button>
 <table id='recent' class='sortable'>
 <thead>
