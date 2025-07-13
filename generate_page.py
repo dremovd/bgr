@@ -148,7 +148,7 @@ def _table_rows(games):
         rows.append(
             f"<tr><td>{idx}</td><td class='thumb'>{img}</td><td>{link}</td>"
             f"<td>{g['Year']}</td><td>{g['Users rated']}</td><td>{g['Average']}</td>"
-            f"<td>{g['bgg_rank']}</td><td>{status_icons}</td>"
+            f"<td>{g['bgg_rank']}</td><td class='status'>{status_icons}</td>"
             f"<td>{g.get('weight', 0):.2f}</td>"
             f"<td>{g['wilson']:.3f}</td><td>{g['weighted']:.3f}</td></tr>"
         )
@@ -183,6 +183,7 @@ th{{cursor:pointer;background:#f3f3f3;}}
 thead th{{position:sticky;top:0;z-index:1;background:#f3f3f3;}}
 tr:nth-child(even){{background:#fafafa;}}
 td.thumb img{{width:48px;height:auto;display:block;}}
+td.status,th.status{{white-space:nowrap;}}
 button{{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:0.5em 1em;margin-bottom:1rem;cursor:pointer;font-size:1rem;}}
 button:hover{{opacity:0.9;}}
 </style>
@@ -201,7 +202,7 @@ button:hover{{opacity:0.9;}}
   <th class='num'>Users Rated</th>
   <th class='num'>Average</th>
   <th class='num'>BGG Rank</th>
-  <th>Status</th>
+  <th class='status'>Status</th>
   <th class='num'>Complexity</th>
   <th class='num'>Wilson</th>
   <th class='num'>Weighted</th>
@@ -222,7 +223,7 @@ button:hover{{opacity:0.9;}}
   <th class='num'>Users Rated</th>
   <th class='num'>Average</th>
   <th class='num'>BGG Rank</th>
-  <th>Status</th>
+  <th class='status'>Status</th>
   <th class='num'>Complexity</th>
   <th class='num'>Wilson</th>
   <th class='num'>Weighted</th>
