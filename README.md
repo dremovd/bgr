@@ -27,6 +27,10 @@ Each row also displays a small thumbnail image and a numeric complexity rating
 fetched from the BGG API.
 The page header also shows the snapshot time parsed from the CSV filename so visitors can see when the rankings were last updated.
 
+The script also writes a second CSV named `details-<timestamp>.csv` containing
+the parsed metadata (weight, expansion flags and number of versions) for every
+game included in the HTML tables.
+
 
 ## GitHub Pages
 

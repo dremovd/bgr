@@ -97,12 +97,15 @@ def parse_details(xml_text: str, game_id: int):
         for l in inbound_versions
         if l.attrib.get("id") != str(game_id)
     }
-    has_versions = len(version_ids | link_ids) > 1
+    unique_versions = version_ids | link_ids
+    has_versions = len(unique_versions) > 1
+    n_versions = len(unique_versions)
     return {
         "weight": weight,
         "is_expansion": is_expansion,
         "reimplements": reimplements,
         "has_versions": has_versions,
+        "n_versions": n_versions,
     }
 
 
@@ -334,9 +337,20 @@ def main():
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
     top_ids = {g["id"] for g in games_recent[:200]} | {g["id"] for g in games_all[:200]}
+    detail_rows = []
     for g in all_games:
         if g["id"] in top_ids:
-            g.update(fetch_details(g["id"]))
+            details = fetch_details(g["id"])
+            g.update(details)
+            row = {"id": g["id"], "name": g["Name"]}
+            row.update(details)
+            detail_rows.append(row)
+    if detail_rows:
+        out_details = f"details-{Path(csv_path).stem}.csv"
+        with open(out_details, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=detail_rows[0].keys())
+            writer.writeheader()
+            writer.writerows(detail_rows)
     generate_html(games_recent[:200], games_all[:200], args.output, args.min_year, snapshot)
 
 
