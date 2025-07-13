@@ -58,35 +58,44 @@ def status_for_rank(rank: int) -> Tuple[str, str]:
     return "💎", "Hidden gem"
 
 
-@lru_cache(maxsize=None)
-def fetch_details(game_id: int):
-    """Return extra info from BGG: weight and flag booleans."""
-    url = (
-        f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
-    )
-    r = requests.get(url, timeout=30)
-    r.raise_for_status()
-    tree = ET.fromstring(r.text)
+def parse_details(xml: str) -> dict:
+    """Parse details XML from BGG."""
+    tree = ET.fromstring(xml)
     item = tree.find("item")
     weight_node = item.find("./statistics/ratings/averageweight")
     weight = float(weight_node.attrib.get("value", "0")) if weight_node is not None else 0.0
     is_expansion = item.attrib.get("type") == "boardgameexpansion"
     reimplements = (
-        item.find(".//link[@type='boardgameimplementation'][@inbound='true']")
-        is not None
+        item.find(".//link[@type='boardgameimplementation'][@inbound='true']") is not None
     )
     versions_node = item.find(".//versions")
-    version_items = versions_node.findall("item") if versions_node is not None else []
-    inbound_versions = item.findall(
-        ".//link[@type='boardgameversion'][@inbound='true']"
-    )
-    has_versions = len(version_items) > 1 or len(inbound_versions) > 1
+    version_ids = {v.attrib.get("id") for v in versions_node.findall("item")} if versions_node is not None else set()
+    inbound_ids = {
+        v.attrib.get("id")
+        for v in item.findall(".//link[@type='boardgameversion'][@inbound='true']")
+    }
+    root_id = item.attrib.get("id")
+    version_ids.discard(root_id)
+    inbound_ids.discard(root_id)
+    version_count = len(version_ids | inbound_ids)
     return {
         "weight": weight,
         "is_expansion": is_expansion,
         "reimplements": reimplements,
-        "has_versions": has_versions,
+        "version_count": version_count,
     }
+
+
+@lru_cache(maxsize=None)
+def fetch_details(game_id: int):
+    """Return extra info from BGG: weight and flags."""
+    url = f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
+    try:
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        return parse_details(r.text)
+    except Exception:
+        return {"weight": 0.0, "is_expansion": False, "reimplements": False, "version_count": 0}
 
 
 def complexity_status(weight: float) -> Tuple[str, str]:
@@ -145,7 +154,7 @@ def _table_rows(games):
             parts.append(("🧩", "Expansion"))
         if g.get("reimplements"):
             parts.append(("♻️", "Reimplements"))
-        if g.get("has_versions"):
+        if g.get("version_count", 0) > 0:
             parts.append(("🌐", "Has versions"))
         parts.append((c_emoji, c_label))
         status_icons = "".join(
@@ -300,6 +309,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("csv_file", nargs="?", default=None)
     parser.add_argument("-o", "--output", default="index.html")
+    parser.add_argument("--details-csv", default="details.csv", help="Output CSV for fetched details")
     parser.add_argument(
         "--min-year",
         type=int,
@@ -317,9 +327,20 @@ def main():
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
     top_ids = {g["id"] for g in games_recent[:200]} | {g["id"] for g in games_all[:200]}
+    details_rows = []
     for g in all_games:
         if g["id"] in top_ids:
-            g.update(fetch_details(g["id"]))
+            details = fetch_details(g["id"])
+            g.update(details)
+            details_rows.append({"id": g["id"], **details})
+
+    if details_rows:
+        with open(args.details_csv, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f, fieldnames=["id", "weight", "is_expansion", "reimplements", "version_count"]
+            )
+            writer.writeheader()
+            writer.writerows(details_rows)
     generate_html(games_recent[:200], games_all[:200], args.output, args.min_year, snapshot)
 
 
