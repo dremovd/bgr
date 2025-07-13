@@ -132,32 +132,23 @@ def _table_rows(games):
         )
         r_emoji, r_label = status_for_rank(g["bgg_rank"])
         c_emoji, c_label = complexity_status(g.get("weight", 0.0))
-        flags = []
-        if g.get("is_expansion"):
-            flags.append("🧩")
-        if g.get("reimplements"):
-            flags.append("♻️")
-        if g.get("has_versions"):
-            flags.append("🌐")
         thumb = g.get("thumb", "")
         img = f"<img src='{thumb}' alt='{g['Name']} thumbnail'>" if thumb else ""
-        title = ", ".join(
-            filter(
-                None,
-                [
-                    r_label,
-                    "Expansion" if g.get("is_expansion") else "",
-                    "Reimplements" if g.get("reimplements") else "",
-                    "Has versions" if g.get("has_versions") else "",
-                    c_label,
-                ],
-            )
+        parts = [(r_emoji, r_label)]
+        if g.get("is_expansion"):
+            parts.append(("🧩", "Expansion"))
+        if g.get("reimplements"):
+            parts.append(("♻️", "Reimplements"))
+        if g.get("has_versions"):
+            parts.append(("🌐", "Has versions"))
+        parts.append((c_emoji, c_label))
+        status_icons = "".join(
+            f"<span title='{lbl}'>{emo}</span>" for emo, lbl in parts
         )
-        status_icons = r_emoji + "".join(flags) + c_emoji
         rows.append(
             f"<tr><td>{idx}</td><td class='thumb'>{img}</td><td>{link}</td>"
             f"<td>{g['Year']}</td><td>{g['Users rated']}</td><td>{g['Average']}</td>"
-            f"<td>{g['bgg_rank']}</td><td><span title='{title}'>{status_icons}</span></td>"
+            f"<td>{g['bgg_rank']}</td><td>{status_icons}</td>"
             f"<td>{g.get('weight', 0):.2f}</td>"
             f"<td>{g['wilson']:.3f}</td><td>{g['weighted']:.3f}</td></tr>"
         )
@@ -189,6 +180,7 @@ body{{
 table{{border-collapse:collapse;width:100%;margin-top:1rem;}}
 th,td{{border:1px solid #ccc;padding:0.5rem;text-align:left;}}
 th{{cursor:pointer;background:#f3f3f3;}}
+thead th{{position:sticky;top:0;z-index:1;background:#f3f3f3;}}
 tr:nth-child(even){{background:#fafafa;}}
 td.thumb img{{width:48px;height:auto;display:block;}}
 button{{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:0.5em 1em;margin-bottom:1rem;cursor:pointer;font-size:1rem;}}
