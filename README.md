@@ -1,6 +1,6 @@
-# bgr
+# best board game
 
-Board Game Rank
+Best Board Game
 
 This project ranks board games using a weighted Wilson lower bound with a strict 99.5% one-sided confidence (z≈2.576). Each game is adjusted with 25 prior votes at rating 6.5 to reduce small-sample effects. The script reads a CSV export from BoardGameGeek and produces a sortable HTML table.
 
@@ -23,4 +23,4 @@ Each row also displays a small thumbnail image using the `Thumbnail` field from 
 
 ## GitHub Pages
 
-Publish the contents of the `docs/` directory as a GitHub Pages site. In the repository settings, set **Pages** → **Source** to the `docs/` folder. After pushing to GitHub, the table will be available at `https://<username>.github.io/<repository>/`.
+Publish the contents of the `docs/` directory as a GitHub Pages site. In the repository settings, set **Pages** → **Source** to the `docs/` folder. After pushing to GitHub, the table will be available at [https://bestboardga.me](https://bestboardga.me).
