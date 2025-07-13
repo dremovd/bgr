@@ -5,6 +5,7 @@ from typing import Union, Tuple
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import requests
+import os
 from functools import lru_cache
 import time
 
@@ -62,6 +63,9 @@ def status_for_rank(rank: int) -> Tuple[str, str]:
 @lru_cache(maxsize=None)
 def fetch_details(game_id: int):
     """Return extra info from BGG: weight and flag booleans."""
+    if os.environ.get("BGR_OFFLINE"):
+        xml = Path("sample.xml").read_text()
+        return parse_details(xml, game_id)
     url = (
         f"https://api.geekdo.com/xmlapi2/thing?id={game_id}&stats=1&versions=1"
     )
