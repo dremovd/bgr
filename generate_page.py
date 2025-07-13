@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 from math import sqrt
 from typing import Union, Tuple
 from pathlib import Path
@@ -33,6 +34,16 @@ def latest_csv() -> str:
     if not files:
         raise FileNotFoundError("No ratings CSV found")
     return str(files[-1])
+
+
+def timestamp_from_csv(path: str) -> str:
+    """Parse an ISO-like timestamp from a CSV filename."""
+    stem = Path(path).stem
+    try:
+        dt = datetime.strptime(stem, "%Y-%m-%dT%H-%M-%S")
+        return dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+    except ValueError:
+        return stem
 
 
 def status_for_rank(rank: int) -> Tuple[str, str]:
@@ -86,7 +97,9 @@ def _table_rows(games):
     return "\n".join(rows)
 
 
-def generate_html(games_recent, games_all, out_path: str, recent_year: int):
+def generate_html(
+    games_recent, games_all, out_path: str, recent_year: int, snapshot: str
+):
     html_head = f"""<!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -117,6 +130,7 @@ button:hover{{opacity:0.9;}}
 </head>
 <body>
 <h1>Best Board Game Rankings (Weighted Wilson 99.5% lower bound)</h1>
+<p>Snapshot: {snapshot}</p>
 <button id='toggle'>Show all years</button>
 <table id='recent' class='sortable'>
 <thead>
@@ -227,13 +241,20 @@ def main():
     args = parser.parse_args()
 
     csv_path = args.csv_file or latest_csv()
+    snapshot = timestamp_from_csv(csv_path)
 
     all_games = read_games(csv_path)
     games_recent = [g for g in all_games if int(g.get("Year", 0)) >= args.min_year]
     games_all = list(all_games)
     games_recent.sort(key=lambda g: g["weighted"], reverse=True)
     games_all.sort(key=lambda g: g["weighted"], reverse=True)
-    generate_html(games_recent[:200], games_all[:200], args.output, args.min_year)
+    generate_html(
+        games_recent[:200],
+        games_all[:200],
+        args.output,
+        args.min_year,
+        snapshot,
+    )
 
 
 if __name__ == "__main__":
